@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Simulatore Iper-Ammortamento 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#f0f4f8;color:#222;font-size:15px;-webkit-text-size-adjust:100%;}
+.hdr{background:#1a3a5c;color:#fff;padding:16px 20px;}
+.hdr h1{font-size:17px;font-weight:700;}
+.hdr p{font-size:11px;color:#aac4e0;margin-top:3px;}
+.wrap{max-width:640px;margin:0 auto;padding:14px 12px 40px;}
+.card{background:#fff;border-radius:10px;border:1px solid #ddd;padding:16px;margin-bottom:14px;}
+.stitle{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+label{font-size:13px;color:#555;display:block;margin-bottom:4px;}
+input[type=number],input[type=text],select{width:100%;padding:10px 12px;font-size:16px;border:1.5px solid #ccc;border-radius:8px;background:#fff;color:#1a3a5c;-webkit-appearance:none;appearance:none;}
+input:focus,select:focus{outline:none;border-color:#1a3a5c;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.row1{margin-bottom:12px;}
+.nota-box{background:#f0f4fa;border-radius:6px;padding:8px 12px;font-size:11px;color:#555;margin-top:6px;}
+.fascia{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #ddd;background:#fafafa;margin-bottom:8px;}
+.fascia.on{border-color:#1D9E75;background:#eaf8f2;}
+.fdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.ftxt{flex:1;font-size:13px;}
+.fpct{font-size:14px;font-weight:700;}
+.rtable{width:100%;border-collapse:collapse;font-size:13px;}
+.rtable td{padding:9px 10px;border-bottom:1px solid #eee;vertical-align:middle;}
+.rtable td:last-child{text-align:right;font-weight:600;font-size:14px;white-space:nowrap;}
+.rtable tr.sep td{background:#f5f5f5;font-weight:600;font-size:14px;}
+.rtable tr.grn td{color:#0a6640;font-size:15px;font-weight:700;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+.mcard{border-radius:8px;padding:12px 10px;}
+.mcard.blu{background:#e8f1fb;}
+.mcard.grn{background:#eaf8f2;}
+.mcard.amb{background:#fff8ea;}
+.ml{font-size:10px;color:#555;margin-bottom:4px;line-height:1.3;}
+.mv{font-size:15px;font-weight:700;}
+.mcard.blu .mv{color:#1a3a5c;}
+.mcard.grn .mv{color:#0a6640;}
+.mcard.amb .mv{color:#7a4800;}
+.ms{font-size:10px;color:#888;margin-top:2px;}
+.barw{height:5px;background:#ddd;border-radius:3px;margin-top:5px;overflow:hidden;}
+.barf{height:100%;border-radius:3px;}
+.row2b{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.warn{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px;}
+.warn-amb{background:#fff3cd;border:1px solid #f0ad4e;color:#6d4a00;}
+.warn-grn{background:#eaf8f2;border:1px solid #1D9E75;color:#0a5c36;}
+.btn-calc{display:block;width:100%;padding:16px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;margin-top:14px;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.btn-print{display:block;width:100%;padding:13px;background:#1a3a5c;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:14px;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.print-hdr{display:none;}
+.foot{text-align:center;font-size:10px;color:#aaa;margin-top:16px;line-height:1.6;}
+@media print{
+.no-print{display:none!important;}
+body{background:#fff;}
+.hdr{background:#1a3a5c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.wrap{padding:0 8px;}
+.card{break-inside:avoid;}
+.mcard{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.mcard.grn{background:#eaf8f2!important;}
+.rtable tr.grn td{color:#0a6640!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.print-hdr{display:block;background:#e8f1fb;border:1px solid #4a90d9;border-radius:6px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:#1a3a5c;}
+.print-hdr strong{font-size:15px;display:block;margin-bottom:2px;}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+<h1>Simulatore Iper-Ammortamento 2026</h1>
+<p>L. 199/2025 &ndash; art. 1, commi 427-432 | D.L. n. 38/2026 &ndash; G.U. n. 72 del 27/03/2026</p>
+</div>
+<div class="wrap">
+<button class="btn-print no-print" onclick="window.print()">&#128424; Stampa / Salva PDF</button>
+<div class="print-hdr"><strong id="ph-nome">Simulazione Iper-Ammortamento 2026</strong><span id="ph-data"></span></div>
+<div class="card">
+<div class="stitle">Cliente e bene</div>
+<div class="row1"><label>Nome cliente / Ragione sociale</label><input type="text" id="cliente" placeholder="Es. Rossi S.r.l."></div>
+<div class="row1"><label>Descrizione bene acquistato</label><input type="text" id="bene" placeholder="Es. Centro di lavoro CNC interconnesso"></div>
+</div>
+<div class="card">
+<div class="stitle">Tipo di soggetto fiscale</div>
+<div class="row1">
+<label>Seleziona il tipo di soggetto</label>
+<select id="tiposoggetto">
+<option value="custom">-- Personalizzata (inserisci manualmente sotto) --</option>
+<optgroup label="IRES - Societa di capitali"><option value="27.9" selected>SRL / SPA - IRES 24% + IRAP 3,9% = 27,9%</option></optgroup>
+<optgroup label="IRPEF - Ditte individuali / Societa di persone">
+<option value="26.9">Reddito fino a 28.000 - IRPEF 23% + IRAP 3,9% = 26,9%</option>
+<option value="36.9">Reddito 28.001-50.000 - IRPEF 33% + IRAP 3,9% = 36,9%</option>
+<option value="46.9">Reddito oltre 50.000 - IRPEF 43% + IRAP 3,9% = 46,9%</option>
+<option value="23">Ditta individuale fino a 28.000 - IRPEF 23% (no IRAP)</option>
+<option value="33">Ditta individuale 28.001-50.000 - IRPEF 33% (no IRAP)</option>
+<option value="43">Ditta individuale oltre 50.000 - IRPEF 43% (no IRAP)</option>
+</optgroup>
+<optgroup label="Con contributi INPS - Artigiani / Commercianti">
+<option value="47">Artigiano/Commerciante fino a 28.000 - IRPEF 23% + INPS ~24%</option>
+<option value="57">Artigiano/Commerciante 28.001-50.000 - IRPEF 33% + INPS ~24%</option>
+<option value="67">Artigiano/Commerciante oltre 50.000 - IRPEF 43% + INPS ~24%</option>
+</optgroup>
+</select>
+</div>
+<div class="nota-box" id="nota-aliquota">IRES 24% + IRAP 3,9%. Aliquota standard per societa di capitali in regime ordinario.</div>
+</div>
+<div class="card">
+<div class="stitle">Dati investimento</div>
+<div class="row2">
+<div><label>Valore bene (euro)</label><input type="number" id="valore" value="65000" min="0" step="1000" inputmode="numeric"></div>
+<div><label>Contributi stesso bene (euro)</label><input type="number" id="contributi" value="0" min="0" step="500" inputmode="numeric"></div>
+</div>
+<div class="row2">
+<div><label>Durata ammortamento</label>
+<select id="durata">
+<option value="5">5 anni - 20%</option>
+<option value="4">4 anni - 25%</option>
+<option value="3" selected>3 anni - 33,3%</option>
+<option value="8">8 anni - 12,5%</option>
+<option value="10">10 anni - 10%</option>
+</select></div>
+<div><label>Aliquota fiscale (%)</label><input type="number" id="aliquota" value="27.9" min="0" max="100" step="0.1" inputmode="decimal"></div>
+</div>
+<button class="btn-calc no-print" id="btnCalc" onclick="calc(); return false;" ontouchend="calc(); return false;">&#9654; Calcola</button>
+</div>
+<div class="card">
+<div class="stitle">Fascia di maggiorazione</div>
+<div id="f180" class="fascia on"><div class="fdot" style="background:#1D9E75;"></div><div class="ftxt">Fino a euro 2.500.000</div><div class="fpct" style="color:#0a6640;">+180%</div></div>
+<div id="f100" class="fascia"><div class="fdot" style="background:#378ADD;"></div><div class="ftxt">Euro 2.500.001 - 10.000.000</div><div class="fpct" style="color:#185FA5;">+100%</div></div>
+<div id="f50" class="fascia"><div class="fdot" style="background:#EF9F27;"></div><div class="ftxt">Euro 10.000.001 - 20.000.000</div><div class="fpct" style="color:#7a4800;">+50%</div></div>
+</div>
+<div class="card">
+<div class="stitle">Dettaglio calcolo</div>
+<table class="rtable">
+<tr><td>Costo netto agevolabile</td><td id="tv">euro 65.000</td></tr>
+<tr><td id="tlm">Maggiorazione (+180%)</td><td id="tm">euro 117.000</td></tr>
+<tr class="sep"><td>Base imponibile maggiorata</td><td id="tb">euro 182.000</td></tr>
+<tr><td id="tla">Quota annua deducibile (33,3% x 3 anni)</td><td id="tqa">euro 60.607 / anno</td></tr>
+<tr><td>Totale deduzioni nel periodo</td><td id="ttd">euro 181.818</td></tr>
+<tr class="grn"><td>Risparmio fiscale ANNUO</td><td id="tra">euro 16.909</td></tr>
+<tr class="grn"><td>Risparmio fiscale TOTALE</td><td id="trt">euro 50.728</td></tr>
+</table>
+</div>
+<div class="card">
+<div class="stitle">Ordinario vs iper-ammortamento</div>
+<div class="mgrid">
+<div class="mcard blu"><div class="ml">Risparmio ordinario</div><div class="mv" id="cord">euro 18.135</div><div class="barw"><div class="barf" id="bord" style="background:#378ADD;width:36%;"></div></div></div>
+<div class="mcard grn"><div class="ml">Risparmio iper-amm.</div><div class="mv" id="ciper">euro 50.728</div><div class="barw"><div class="barf" style="background:#1D9E75;width:100%;"></div></div></div>
+<div class="mcard amb"><div class="ml">Beneficio aggiuntivo</div><div class="mv" id="cdelta">euro 32.593</div><div class="ms" id="csub">+180% vs ordinario</div></div>
+</div>
+<div class="row2b" style="margin-top:10px;">
+<div class="mcard blu"><div class="ml">Costo effettivo SENZA</div><div class="mv" id="cord2">euro 46.865</div><div class="ms">bene meno risp. ordinario</div></div>
+<div class="mcard grn"><div class="ml">Costo effettivo CON</div><div class="mv" id="ciper2">euro 14.272</div><div class="ms">bene meno risp. iper-amm.</div></div>
+</div>
+</div>
+<div id="wcontrib" class="warn warn-amb" style="display:none;">Attenzione: contributi presenti. Il calcolo e effettuato sul costo netto (comma 431 L.199/2025).</div>
+<div class="warn warn-grn">Vincolo Made in UE/SEE eliminato (D.L. n. 38/2026, art. 7, G.U. n. 72 del 27/03/2026, efficacia retroattiva dal 1 gennaio 2026). Beni acquistabili da qualsiasi paese. Rimane il vincolo solo per moduli fotovoltaici (categorie B/C registro ENEA). Il bene deve essere interconnesso ai sistemi aziendali e incluso negli Allegati IV-V della L. 199/2025.</div>
+<div class="foot">L. 30 dicembre 2025, n. 199 - G.U. n. 301 | D.L. n. 38/2026 - G.U. n. 72 del 27/03/2026<br>A soli fini illustrativi. Non sostituisce consulenza fiscale professionale.</div>
+</div>
+<script>
+var dm={5:0.20,4:0.25,3:0.3333,8:0.125,10:0.10};
+var note={'custom':'Aliquota personalizzata.','27.9':'IRES 24% + IRAP 3,9%. Aliquota standard per societa di capitali in regime ordinario.','26.9':'IRPEF 23% (fino a 28.000) + IRAP 3,9%. Per societa di persone o ditte con IRAP.','36.9':'IRPEF 33% (28.001-50.000) + IRAP 3,9%.','46.9':'IRPEF 43% (oltre 50.000) + IRAP 3,9%.','23':'IRPEF 23%. Ditta individuale senza IRAP.','33':'IRPEF 33%. Ditta individuale senza IRAP.','43':'IRPEF 43%. Ditta individuale senza IRAP.','47':'IRPEF 23% + INPS ~24%. Stima per artigiani/commercianti.','57':'IRPEF 33% + INPS ~24%. Stima per artigiani/commercianti.','67':'IRPEF 43% + INPS ~24%. Stima per artigiani/commercianti.'};
+var notes=note;
+function gi(id){return document.getElementById(id);}
+function fi(n){return 'euro '+Math.round(n).toLocaleString('it-IT');}
+function calc(){
+var vr=parseFloat(gi('valore').value)||0;
+var co=parseFloat(gi('contributi').value)||0;
+var al=parseFloat(gi('aliquota').value)/100||0.279;
+var du=parseInt(gi('durata').value)||3;
+var pa=dm[du]||0.3333;
+var vn=Math.max(0,vr-co);
+var pm,lm;
+if(vn<=2500000){pm=1.80;lm='Maggiorazione (+180%)';}
+else if(vn<=10000000){pm=1.00;lm='Maggiorazione (+100%)';}
+else if(vn<=20000000){pm=0.50;lm='Maggiorazione (+50%)';}
+else{pm=0;lm='Fuori soglia (oltre 20M)';}
+var magg=vn*pm;var base=vn+magg;var qai=base*pa;var tdi=qai*du;var ra=qai*al;var rt=ra*du;var ro=vn*pa*al*du;var delta=rt-ro;
+var pls=(pa===0.3333)?'33,3':(pa*100).toFixed(1).replace('.',',');
+gi('tv').textContent=fi(vn);gi('tlm').textContent=lm;gi('tm').textContent=fi(magg);gi('tb').textContent=fi(base);
+gi('tla').textContent='Quota annua deducibile ('+pls+'% x '+du+' anni)';gi('tqa').textContent=fi(qai)+' / anno';
+gi('ttd').textContent=fi(tdi);gi('tra').textContent=fi(ra);gi('trt').textContent=fi(rt);
+gi('cord').textContent=fi(ro);gi('ciper').textContent=fi(rt);gi('cdelta').textContent=fi(delta);
+gi('csub').textContent=ro>0?'+'+Math.round((rt/ro-1)*100)+'% vs ordinario':'--';
+gi('cord2').textContent=fi(vr-ro);gi('ciper2').textContent=fi(vr-rt);
+gi('bord').style.width=Math.round((ro/Math.max(rt,1))*100)+'%';
+gi('f180').className='fascia'+(pm===1.80?' on':'');
+gi('f100').className='fascia'+(pm===1.00?' on':'');
+gi('f50').className='fascia'+(pm===0.50?' on':'');
+gi('wcontrib').style.display=co>0?'block':'none';
+var nome=gi('cliente').value.trim();
+gi('ph-nome').textContent=nome?'Simulazione per: '+nome:'Simulazione Iper-Ammortamento 2026';
+gi('ph-data').textContent='Data: '+new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
+}
+gi('tiposoggetto').onchange=function(){var v=this.value;gi('nota-aliquota').textContent=notes[v]||'';if(v!=='custom'){gi('aliquota').value=v;}calc();};
+function on(id,evs){var el=gi(id);if(!el)return;for(var i=0;i<evs.length;i++)el.addEventListener(evs[i],calc);}
+on('valore',['change','blur']);on('contributi',['change','blur']);on('aliquota',['change','blur']);on('durata',['change']);
+gi('aliquota').addEventListener('input',function(){gi('tiposoggetto').value='custom';gi('nota-aliquota').textContent='Aliquota personalizzata.';});
+calc();
+</script>
+</body>
+</html>
