@@ -46,7 +46,6 @@ input:focus,select:focus{outline:none;border-color:#1a3a5c;}
 .warn{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:10px;}
 .warn-amb{background:#fff3cd;border:1px solid #f0ad4e;color:#6d4a00;}
 .warn-grn{background:#eaf8f2;border:1px solid #1D9E75;color:#0a5c36;}
-.btn-calc{display:block;width:100%;padding:16px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;margin-top:14px;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
 .btn-print{display:block;width:100%;padding:13px;background:#1a3a5c;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:14px;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
 .print-hdr{display:none;}
 .foot{text-align:center;font-size:10px;color:#aaa;margin-top:16px;line-height:1.6;}
@@ -79,8 +78,7 @@ body{background:#fff;}
 </div>
 <div class="card">
 <div class="stitle">Tipo di soggetto fiscale</div>
-<div class="row1">
-<label>Seleziona il tipo di soggetto</label>
+<div class="row1"><label>Seleziona il tipo di soggetto</label>
 <select id="tiposoggetto">
 <option value="custom">-- Personalizzata (inserisci manualmente sotto) --</option>
 <optgroup label="IRES - Societa di capitali"><option value="27.9" selected>SRL / SPA - IRES 24% + IRAP 3,9% = 27,9%</option></optgroup>
@@ -97,8 +95,7 @@ body{background:#fff;}
 <option value="57">Artigiano/Commerciante 28.001-50.000 - IRPEF 33% + INPS ~24%</option>
 <option value="67">Artigiano/Commerciante oltre 50.000 - IRPEF 43% + INPS ~24%</option>
 </optgroup>
-</select>
-</div>
+</select></div>
 <div class="nota-box" id="nota-aliquota">IRES 24% + IRAP 3,9%. Aliquota standard per societa di capitali in regime ordinario.</div>
 </div>
 <div class="card">
@@ -155,23 +152,14 @@ body{background:#fff;}
 </div>
 <script>
 var dm={5:0.20,4:0.25,3:0.3333,8:0.125,10:0.10};
-var note={'custom':'Aliquota personalizzata.','27.9':'IRES 24% + IRAP 3,9%. Aliquota standard per societa di capitali in regime ordinario.','26.9':'IRPEF 23% (fino a 28.000) + IRAP 3,9%. Per societa di persone o ditte con IRAP.','36.9':'IRPEF 33% (28.001-50.000) + IRAP 3,9%.','46.9':'IRPEF 43% (oltre 50.000) + IRAP 3,9%.','23':'IRPEF 23%. Ditta individuale senza IRAP.','33':'IRPEF 33%. Ditta individuale senza IRAP.','43':'IRPEF 43%. Ditta individuale senza IRAP.','47':'IRPEF 23% + INPS ~24%. Stima per artigiani/commercianti.','57':'IRPEF 33% + INPS ~24%. Stima per artigiani/commercianti.','67':'IRPEF 43% + INPS ~24%. Stima per artigiani/commercianti.'};
-var notes=note;
+var notes={'custom':'Aliquota personalizzata.','27.9':'IRES 24% + IRAP 3,9%. Aliquota standard per societa di capitali in regime ordinario.','26.9':'IRPEF 23% (fino a 28.000) + IRAP 3,9%.','36.9':'IRPEF 33% (28.001-50.000) + IRAP 3,9%.','46.9':'IRPEF 43% (oltre 50.000) + IRAP 3,9%.','23':'IRPEF 23%. Ditta individuale senza IRAP.','33':'IRPEF 33%. Ditta individuale senza IRAP.','43':'IRPEF 43%. Ditta individuale senza IRAP.','47':'IRPEF 23% + INPS ~24%. Stima per artigiani/commercianti.','57':'IRPEF 33% + INPS ~24%. Stima per artigiani/commercianti.','67':'IRPEF 43% + INPS ~24%. Stima per artigiani/commercianti.'};
 function gi(id){return document.getElementById(id);}
 function fi(n){return 'euro '+Math.round(n).toLocaleString('it-IT');}
 function calc(){
-var vr=parseFloat(gi('valore').value)||0;
-var co=parseFloat(gi('contributi').value)||0;
-var al=parseFloat(gi('aliquota').value)/100||0.279;
-var du=parseInt(gi('durata').value)||3;
-var pa=dm[du]||0.3333;
-var vn=Math.max(0,vr-co);
+var vr=parseFloat(gi('valore').value)||0,co=parseFloat(gi('contributi').value)||0,al=parseFloat(gi('aliquota').value)/100||0.279,du=parseInt(gi('durata').value)||3,pa=dm[du]||0.3333,vn=Math.max(0,vr-co);
 var pm,lm;
-if(vn<=2500000){pm=1.80;lm='Maggiorazione (+180%)';}
-else if(vn<=10000000){pm=1.00;lm='Maggiorazione (+100%)';}
-else if(vn<=20000000){pm=0.50;lm='Maggiorazione (+50%)';}
-else{pm=0;lm='Fuori soglia (oltre 20M)';}
-var magg=vn*pm;var base=vn+magg;var qai=base*pa;var tdi=qai*du;var ra=qai*al;var rt=ra*du;var ro=vn*pa*al*du;var delta=rt-ro;
+if(vn<=2500000){pm=1.80;lm='Maggiorazione (+180%)';}else if(vn<=10000000){pm=1.00;lm='Maggiorazione (+100%)';}else if(vn<=20000000){pm=0.50;lm='Maggiorazione (+50%)';}else{pm=0;lm='Fuori soglia (oltre 20M)';}
+var magg=vn*pm,base=vn+magg,qai=base*pa,tdi=qai*du,ra=qai*al,rt=ra*du,ro=vn*pa*al*du,delta=rt-ro;
 var pls=(pa===0.3333)?'33,3':(pa*100).toFixed(1).replace('.',',');
 gi('tv').textContent=fi(vn);gi('tlm').textContent=lm;gi('tm').textContent=fi(magg);gi('tb').textContent=fi(base);
 gi('tla').textContent='Quota annua deducibile ('+pls+'% x '+du+' anni)';gi('tqa').textContent=fi(qai)+' / anno';
@@ -180,9 +168,7 @@ gi('cord').textContent=fi(ro);gi('ciper').textContent=fi(rt);gi('cdelta').textCo
 gi('csub').textContent=ro>0?'+'+Math.round((rt/ro-1)*100)+'% vs ordinario':'--';
 gi('cord2').textContent=fi(vr-ro);gi('ciper2').textContent=fi(vr-rt);
 gi('bord').style.width=Math.round((ro/Math.max(rt,1))*100)+'%';
-gi('f180').className='fascia'+(pm===1.80?' on':'');
-gi('f100').className='fascia'+(pm===1.00?' on':'');
-gi('f50').className='fascia'+(pm===0.50?' on':'');
+gi('f180').className='fascia'+(pm===1.80?' on':'');gi('f100').className='fascia'+(pm===1.00?' on':'');gi('f50').className='fascia'+(pm===0.50?' on':'');
 gi('wcontrib').style.display=co>0?'block':'none';
 var nome=gi('cliente').value.trim();
 gi('ph-nome').textContent=nome?'Simulazione per: '+nome:'Simulazione Iper-Ammortamento 2026';
@@ -190,7 +176,7 @@ gi('ph-data').textContent='Data: '+new Date().toLocaleDateString('it-IT',{day:'2
 }
 gi('tiposoggetto').onchange=function(){var v=this.value;gi('nota-aliquota').textContent=notes[v]||'';if(v!=='custom'){gi('aliquota').value=v;}calc();};
 function on(id,evs){var el=gi(id);if(!el)return;for(var i=0;i<evs.length;i++)el.addEventListener(evs[i],calc);}
-on('valore',['change','blur']);on('contributi',['change','blur']);on('aliquota',['change','blur']);on('durata',['change']);
+on('valore',['change','input','blur']);on('contributi',['change','input','blur']);on('aliquota',['change','input','blur']);on('durata',['change']);
 gi('aliquota').addEventListener('input',function(){gi('tiposoggetto').value='custom';gi('nota-aliquota').textContent='Aliquota personalizzata.';});
 calc();
 </script>
