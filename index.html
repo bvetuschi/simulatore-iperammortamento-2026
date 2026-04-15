@@ -61,6 +61,24 @@ body{background:#fff;}
 .print-hdr{display:block;background:#e8f1fb;border:1px solid #4a90d9;border-radius:6px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:#1a3a5c;}
 .print-hdr strong{font-size:15px;display:block;margin-bottom:2px;}
 }
+
+/* === LOGO RIVENDITORE === */
+.logo-bar{background:#fff;border-bottom:2px solid #dce5ec;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:100%}
+.logo-img-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:100px;height:56px;border:2px dashed #b8c6d1;border-radius:7px;overflow:hidden;background:#f7f9fb;cursor:pointer;transition:.15s}
+.logo-img-wrap:hover{border-color:#2c5f6e;background:#eef4ff}
+.logo-img-wrap img{max-width:100%;max-height:100%;object-fit:contain}
+.logo-img-wrap .logo-ph{font-size:.65rem;color:#aaa;text-align:center;line-height:1.3;pointer-events:none;padding:4px}
+.logo-riv-name{font-size:.9rem;font-weight:700;color:#1a3a4a;border:none;background:transparent;outline:none;min-width:140px;max-width:260px;font-family:inherit}
+.logo-riv-name:focus{border-bottom:1px solid #1a3a5c}
+.logo-actions{display:flex;align-items:center;gap:8px}
+.logo-btn{font-size:.75rem;padding:6px 14px;border-radius:5px;border:1px solid #b8c6d1;background:#fff;cursor:pointer;color:#444;font-family:inherit;transition:.15s}
+.logo-btn:hover{border-color:#1a3a5c;color:#1a3a5c}
+.logo-btn.lb-p{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.logo-btn.lb-p:hover{background:#0f2438}
+.logo-btn.lb-d{color:#c0392b;border-color:#e8b8b8}
+.logo-btn.lb-d:hover{background:#fde8e8}
+@media print{.logo-bar{display:flex!important;background:#fff!important;border-bottom:1px solid #ccc!important;padding:8px 16px!important;page-break-inside:avoid}.logo-img-wrap{border:none!important;background:transparent!important}.logo-actions{display:none!important}.logo-riv-name{color:#1a3a5c!important;font-size:.85rem!important}}
+@media(max-width:700px){.logo-bar{flex-direction:column;align-items:flex-start}.logo-riv-name{max-width:100%}}
 </style>
 </head>
 <body>
@@ -68,6 +86,31 @@ body{background:#fff;}
 <h1>Simulatore Iper-Ammortamento 2026</h1>
 <p>L. 199/2025 &ndash; art. 1, commi 427-432 | D.L. n. 38/2026 &ndash; G.U. n. 72 del 27/03/2026</p>
 </div>
+
+<!-- LOGO RIVENDITORE -->
+<div class="logo-bar no-print" id="logoBar">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="logo-img-wrap" id="logoWrap" onclick="document.getElementById('logoFileInput').click()">
+      <span class="logo-ph" id="logoPH">Logo<br>rivenditore</span>
+      <img id="logoImg" src="" alt="Logo" style="display:none">
+    </div>
+    <div>
+      <div style="font-size:.68rem;color:#888;margin-bottom:2px">Rivenditore</div>
+      <input class="logo-riv-name" id="rivInput" type="text" value="" placeholder="Nome rivenditore">
+    </div>
+  </div>
+  <div class="logo-actions">
+    <button class="logo-btn lb-p" onclick="document.getElementById('logoFileInput').click()">Carica logo</button>
+    <button class="logo-btn lb-d" id="logoRmBtn" style="display:none" onclick="rmLogo()">Rimuovi</button>
+  </div>
+</div>
+<input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="loadLogo(this)">
+<div id="logoPrintBar" style="display:none;background:#fff;border-bottom:1px solid #ccc;padding:8px 20px;align-items:center;gap:14px">
+  <img id="logoPrintImg" src="" alt="" style="max-height:48px;max-width:100px;object-fit:contain">
+  <span id="logoPrintName" style="font-size:.9rem;font-weight:700;color:#1a3a5c"></span>
+</div>
+<!-- FINE LOGO RIVENDITORE -->
+
 <div class="wrap">
 <button class="btn-print no-print" onclick="window.print()">&#128424; Stampa / Salva PDF</button>
 <div class="print-hdr"><strong id="ph-nome">Simulazione Iper-Ammortamento 2026</strong><span id="ph-data"></span></div>
@@ -180,6 +223,16 @@ function on(id,evs){var el=gi(id);if(!el)return;for(var i=0;i<evs.length;i++)el.
 on('valore',['change','input','blur']);on('contributi',['change','input','blur']);on('aliquota',['change','input','blur']);on('durata',['change']);
 gi('aliquota').addEventListener('input',function(){gi('tiposoggetto').value='custom';gi('nota-aliquota').textContent='Aliquota personalizzata.';});
 calc();
+
+/* === LOGO RIVENDITORE === */
+function loadLogo(input){var f=input.files[0];if(!f)return;if(f.size>2097152){alert('Max 2 MB');return;}var r=new FileReader();r.onload=function(e){setLogo(e.target.result);};r.readAsDataURL(f);input.value='';}
+function setLogo(u){var i=document.getElementById('logoImg'),p=document.getElementById('logoPH'),b=document.getElementById('logoRmBtn'),pi=document.getElementById('logoPrintImg'),pb=document.getElementById('logoPrintBar');i.src=u;i.style.display='block';p.style.display='none';b.style.display='inline-block';pi.src=u;pb.style.display='flex';try{sessionStorage.setItem('lrv_img',u);}catch(e){}}
+function rmLogo(){var i=document.getElementById('logoImg'),p=document.getElementById('logoPH'),b=document.getElementById('logoRmBtn'),pi=document.getElementById('logoPrintImg'),pb=document.getElementById('logoPrintBar');i.src='';i.style.display='none';p.style.display='block';b.style.display='none';pi.src='';pb.style.display='none';try{sessionStorage.removeItem('lrv_img');}catch(e){}}
+(function(){var ni=document.getElementById('rivInput'),pn=document.getElementById('logoPrintName');if(ni&&pn)ni.addEventListener('input',function(){pn.textContent=ni.value;try{sessionStorage.setItem('lrv_nome',ni.value);}catch(e){}});})();
+(function(){var b=document.getElementById('logoBar');if(!b)return;b.addEventListener('dragover',function(e){e.preventDefault();});b.addEventListener('drop',function(e){e.preventDefault();var f=e.dataTransfer.files[0];if(!f||!f.type.startsWith('image/'))return;var r=new FileReader();r.onload=function(ev){setLogo(ev.target.result);};r.readAsDataURL(f);});})();
+(function(){try{var i=sessionStorage.getItem('lrv_img'),n=sessionStorage.getItem('lrv_nome');if(i)setLogo(i);if(n){var ni=document.getElementById('rivInput'),pn=document.getElementById('logoPrintName');if(ni)ni.value=n;if(pn)pn.textContent=n;}}catch(e){}})();
+(function(){var op=window.print.bind(window);window.print=function(){var pb=document.getElementById('logoPrintBar'),lb=document.getElementById('logoBar'),pi=document.getElementById('logoPrintImg'),ni=document.getElementById('rivInput');if((pi&&pi.src&&pi.src!==location.href)||(ni&&ni.value.trim()))if(pb)pb.style.display='flex';if(lb)lb.style.display='none';op();setTimeout(function(){if(lb)lb.style.display='flex';},500);};})();
+/* === FINE LOGO RIVENDITORE === */
 </script>
 </body>
 </html>
